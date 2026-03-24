@@ -1,23 +1,30 @@
 /* 
-Created Feb 2026
+Created March 2026
 by Jack Langdon 
-This program controls a servo motor
+This program controls a distance sensor
 */
 
-#include <Servo.h>
+const int trigPin = 3;
+const int echoPin = 2;
 
-Servo servoNumber1;
+float duration, distance;
 
-   // setup servo pins
 void setup() {
-   servoNumber1.attach(2);
-   servoNumber1.write(0);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  Serial.begin(9600);
 }
 
-   //put main code here, to run repeadtedly
 void loop() {
-   servoNumber1.write(180);
-   delay(1000);
-   servoNumber1.write(0);
-   delay(1000);
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  duration = pulseIn(echoPin, HIGH);
+  distance = (duration*.0343)/2;
+  Serial.print("Distance: ");
+  Serial.println(distance);
+  delay(100);
 }
